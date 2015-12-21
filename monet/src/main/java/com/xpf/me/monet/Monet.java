@@ -14,6 +14,7 @@ import android.support.v4.util.LruCache;
 import android.widget.ImageView;
 
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.xpf.me.monety.R;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -48,7 +49,7 @@ public class Monet {
     private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
     private static final long KEEP_ALIVE = 10L;
 
-    private static final int TAG_KEY_URI = 2333;
+    private static final int TAG_KEY_URI = R.id.dummy;
     private static final long DISK_CACHE_SIZE = 1024 * 1024 * 50;//50m for disk cache
     private static final int IO_BUFFER_SIZE = 8 * 1024;
     private static final int DISK_CACHE_INDEX = 0;
@@ -153,7 +154,7 @@ public class Monet {
                 Bitmap bitmap1 = loadBitmap(uri, reqWidth, reqHeight);
                 if (bitmap1 != null) {
                     MonetResult result = new MonetResult(imageView, uri, bitmap);
-                    mMainHandler.obtainMessage(MESSAGE_POST_RESULT, reqHeight).sendToTarget();
+                    mMainHandler.obtainMessage(MESSAGE_POST_RESULT, result).sendToTarget();
                 }
             }
         };

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xpf.me.monet">
+    package="com.xpf.me.monety">
 
     <application
         android:allowBackup="true"

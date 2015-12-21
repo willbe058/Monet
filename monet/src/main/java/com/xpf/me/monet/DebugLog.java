@@ -1,6 +1,7 @@
 package com.xpf.me.monet;
 
 import android.os.SystemClock;
+import android.support.v7.appcompat.BuildConfig;
 import android.util.Log;
 
 import java.util.ArrayList;
