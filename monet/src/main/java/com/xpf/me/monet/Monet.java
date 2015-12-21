@@ -115,12 +115,12 @@ public class Monet {
     }
 
     /**
-     * build a new instance of Monet
+     * with a new instance of Monet
      *
      * @param context
      * @return
      */
-    public static Monet build(Context context) {
+    public static Monet with(Context context) {
         return new Monet(context);
     }
 
@@ -140,7 +140,8 @@ public class Monet {
      * @param uri
      * @param imageView
      */
-    public void bindBitmap(final String uri, final ImageView imageView, final int reqWidth, final int reqHeight) {
+    public void draw(final String uri, final ImageView imageView
+            , final int reqWidth, final int reqHeight) {
         imageView.setTag(TAG_KEY_URI, uri);
         final Bitmap bitmap = loadBitmapFromMemCache(uri);
         if (bitmap != null) {

@@ -19,12 +19,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
     private List<String> mData;
 
-    private Monet monet;
-
     public MyAdapter(Context context) {
         this.mContext = context;
         this.mData = new ArrayList<>();
-        monet = Monet.build(mContext);
     }
 
 
@@ -42,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
         String url = mData.get(position);
-        monet.bindBitmap(url, holder.imageView, 100, 100);
+        Monet.with(mContext).draw(url, holder.imageView, 100, 100);
     }
 
     @Override

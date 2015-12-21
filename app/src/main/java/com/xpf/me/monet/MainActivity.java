@@ -18,18 +18,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-
-    private MyAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        recyclerView = ((RecyclerView) findViewById(R.id.recycler));
-        adapter = new MyAdapter(this);
+        RecyclerView recyclerView = ((RecyclerView) findViewById(R.id.recycler));
+        MyAdapter adapter = new MyAdapter(this);
         Resources res = getResources();
         String[] b = res.getStringArray(R.array.beauties);
         List<String> beauties = Arrays.asList(b);
