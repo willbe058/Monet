@@ -24,4 +24,11 @@ dependencies {
 	}
 	
 ```
+
+and use it in your project
+```java
+	
+	Monet.build(context).draw(url,imageview,100,100);
+
+```
 that's it! 
