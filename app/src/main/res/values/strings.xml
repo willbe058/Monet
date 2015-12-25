@@ -2,15 +2,14 @@
     <string name="app_name">Monet</string>
     <string name="action_settings">Settings</string>
     <string-array name="beauties">
-        <item>http://img9.tu11.com:8080/uploads/allimg/150418/1_041Q024134405.jpg</item>
-        <item>http://t1.27270.com/uploads/150622/7-15062216410a21.jpg</item>
-        <item>http://t1.27270.com/uploads/150619/7-150619163IV33.jpg</item>
-        <item>http://t1.27270.com/uploads/allimg/150626/7_0626164F02L9.jpg</item>
-        <item>http://t1.27270.com/uploads/150615/7-1506151H6111a.jpg</item>
-        <item>http://t1.27270.com/uploads/allimg/150613/7_0613114204N36.jpg</item>
-        <item>http://t1.27270.com/uploads/allimg/150626/7_0626164R33516.jpg</item>
-        <item>http://t1.27270.com/uploads/allimg/150618/7_061Q6325N453.jpg</item>
-        <item>http://t1.27270.com/uploads/150616/7-150616163120608.jpg</item>
-        <item>http://t1.27270.com/uploads/allimg/150624/7_06241I4145016.jpg</item>
+        <item>https://d13yacurqjgara.cloudfront.net/users/541516/screenshots/2423081/lettering_merry_christmas_1x.jpg</item>
+        <item>https://d13yacurqjgara.cloudfront.net/users/776386/screenshots/2422895/grofers-eye---onboarding_1x.jpg</item>
+        <item>https://d13yacurqjgara.cloudfront.net/users/175710/screenshots/2423386/muhomor-01_1x.png</item>
+        <item>https://d13yacurqjgara.cloudfront.net/users/408943/screenshots/2422878/landing-1_1x.jpg</item>
+        <item>https://d13yacurqjgara.cloudfront.net/users/575295/screenshots/2422858/003_shot_duxnguyen_1x.png</item>
+        <item>https://d13yacurqjgara.cloudfront.net/users/283823/screenshots/2423298/workshop-01_1x.jpg</item>
+        <item>https://d13yacurqjgara.cloudfront.net/users/218187/screenshots/2423071/plan_a_1x.png</item>
+        <item>https://d13yacurqjgara.cloudfront.net/users/102849/screenshots/2423041/banked_app_map_1x.jpg</item>
+        <item>https://d13yacurqjgara.cloudfront.net/users/43342/screenshots/2423710/dribbble_2015_dec_season_1x.jpg</item>
     </string-array>
 </resources>

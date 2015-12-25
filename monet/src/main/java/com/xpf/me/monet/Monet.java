@@ -76,7 +76,7 @@ public class Monet {
         public void handleMessage(Message msg) {
             MonetResult result = ((MonetResult) msg.obj);
             ImageView imageView = result.imageView;
-            imageView.setImageBitmap(result.bitmap);
+//            imageView.setImageBitmap(result.bitmap);
             String uri = ((String) imageView.getTag(TAG_KEY_URI));
             if (uri.equals(result.uri)) {
                 imageView.setImageBitmap(result.bitmap);
