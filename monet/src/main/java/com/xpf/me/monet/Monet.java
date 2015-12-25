@@ -27,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.StringTokenizer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -114,15 +115,6 @@ public class Monet {
         }
     }
 
-    /**
-     * with a new instance of Monet
-     *
-     * @param context
-     * @return
-     */
-    public static Monet with(Context context) {
-        return new Monet(context);
-    }
 
     private void addBitmapToMemoryCache(String key, Bitmap bitmap) {
         if (getBitmapFromMemCache(key) == null) {
@@ -140,7 +132,7 @@ public class Monet {
      * @param uri
      * @param imageView
      */
-    public void draw(final String uri, final ImageView imageView
+    private void draw(final String uri, final ImageView imageView
             , final int reqWidth, final int reqHeight) {
         imageView.setTag(TAG_KEY_URI, uri);
         final Bitmap bitmap = loadBitmapFromMemCache(uri);
@@ -154,7 +146,7 @@ public class Monet {
             public void run() {
                 Bitmap bitmap1 = loadBitmap(uri, reqWidth, reqHeight);
                 if (bitmap1 != null) {
-                    MonetResult result = new MonetResult(imageView, uri, bitmap);
+                    MonetResult result = new MonetResult(imageView, uri, bitmap1);
                     mMainHandler.obtainMessage(MESSAGE_POST_RESULT, result).sendToTarget();
                 }
             }
@@ -258,7 +250,6 @@ public class Monet {
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
-
             }
             IOUtils.closeSilently(out);
             IOUtils.closeSilently(in);
@@ -330,6 +321,46 @@ public class Monet {
         }
         final StatFs stats = new StatFs(path.getPath());
         return stats.getBlockSizeLong() * stats.getAvailableBlocksLong();
+    }
+
+    public static Builder with(Context context) {
+        return new Builder(context);
+    }
+
+    public static class Builder {
+
+        private int reqWidth, reqHeight;
+
+        private ImageView targetView;
+
+        private Context context;
+
+        private String url;
+
+
+        public Builder(Context context) {
+            this.context = context;
+        }
+
+        public Builder load(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder size(int reqWidth, int reqHeight) {
+            this.reqWidth = reqWidth;
+            this.reqHeight = reqHeight;
+            return this;
+        }
+
+        public Builder on(ImageView target) {
+            this.targetView = target;
+            return this;
+        }
+
+        public void draw() {
+            new Monet(context).draw(url, targetView, reqWidth, reqHeight);
+        }
     }
 
     private static class MonetResult {
