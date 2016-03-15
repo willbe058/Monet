@@ -43,6 +43,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
                 .load(url)
                 .size(100, 100)
                 .on(holder.imageView)
+                .placeHolder(R.mipmap.ic_launcher)
                 .draw();
     }
 

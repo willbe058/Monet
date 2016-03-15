@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -23,16 +24,13 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.StringTokenizer;
-import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -56,43 +54,36 @@ public class Monet {
     private static final int DISK_CACHE_INDEX = 0;
     private boolean mIsDiskLruCacheCreated = false;
 
-    private static final ThreadFactory sThreadFactory = new ThreadFactory() {
+    final Dispatcher dispatcher;
+    public static final ExecutorService THREAD_POOL_EXECUTOR = new MonetExecutorService();
 
-        private final AtomicInteger mCount = new AtomicInteger(1);
 
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, "Monet#" + mCount.getAndIncrement());
-        }
-    };
+    final static Handler MHandler = new Handler(Looper.getMainLooper()) {
 
-    public static final Executor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE
-            , TimeUnit.SECONDS
-            , new LinkedBlockingQueue<Runnable>()
-            , sThreadFactory);
-
-    private Handler mMainHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             MonetResult result = ((MonetResult) msg.obj);
             ImageView imageView = result.imageView;
-//            imageView.setImageBitmap(result.bitmap);
+            imageView.setImageBitmap(result.bitmap);
             String uri = ((String) imageView.getTag(TAG_KEY_URI));
             if (uri.equals(result.uri)) {
                 imageView.setImageBitmap(result.bitmap);
             } else {
+                imageView.setImageDrawable(mDefalutDrawable);
                 DebugLog.v("set image bitmap, but url has changed, ignored", this);
             }
         }
     };
 
-    private Context mContext;
     private ImageResizer mImageResizer = new ImageResizer();
     private LruCache<String, Bitmap> mMemoryCache;
     private DiskLruCache mDiskLruCache;
 
-    private Monet(Context context) {
-        mContext = context.getApplicationContext();
+    static private Drawable mDefalutDrawable;
+
+    private Monet(Context context, Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+        Context mContext = context.getApplicationContext();
         int maxMemory = ((int) (Runtime.getRuntime().maxMemory() / 1024));
         int cacheSize = maxMemory / 8;
         mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
@@ -113,6 +104,7 @@ public class Monet {
                 e.printStackTrace();
             }
         }
+
     }
 
 
@@ -133,11 +125,19 @@ public class Monet {
      * @param imageView
      */
     private void draw(final String uri, final ImageView imageView
-            , final int reqWidth, final int reqHeight) {
+            , final int reqWidth, final int reqHeight, Drawable defaultDrawable) {
+        this.mDefalutDrawable = defaultDrawable;
         imageView.setTag(TAG_KEY_URI, uri);
         final Bitmap bitmap = loadBitmapFromMemCache(uri);
+
         if (bitmap != null) {
-            imageView.setImageBitmap(bitmap);
+            String url = ((String) imageView.getTag(TAG_KEY_URI));
+            if (url.equals(uri)) {
+                imageView.setImageBitmap(bitmap);
+            } else {
+                imageView.setImageDrawable(mDefalutDrawable);
+                DebugLog.v("set image bitmap, but url has changed, ignored", this);
+            }
             return;
         }
 
@@ -147,11 +147,11 @@ public class Monet {
                 Bitmap bitmap1 = loadBitmap(uri, reqWidth, reqHeight);
                 if (bitmap1 != null) {
                     MonetResult result = new MonetResult(imageView, uri, bitmap1);
-                    mMainHandler.obtainMessage(MESSAGE_POST_RESULT, result).sendToTarget();
+                    dispatcher.dispatcherComplete(result);
                 }
             }
         };
-        THREAD_POOL_EXECUTOR.execute(loadBitmapTask);
+        dispatcher.dispatcherSubmit(loadBitmapTask);
     }
 
     public Bitmap loadBitmap(String uri, int reqWidth, int reqHeight) {
@@ -182,8 +182,7 @@ public class Monet {
 
     private Bitmap loadBitmapFromMemCache(String url) {
         final String key = hashKeyFormUrl(url);
-        Bitmap bitmap = getBitmapFromMemCache(key);
-        return bitmap;
+        return getBitmapFromMemCache(key);
     }
 
     private Bitmap loadBitmapFromHttp(String url, int reqWidth, int reqHeight) throws IOException {
@@ -293,8 +292,8 @@ public class Monet {
 
     private String bytesToHexString(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < bytes.length; i++) {
-            String hex = Integer.toHexString(0xFF & bytes[i]);
+        for (byte aByte : bytes) {
+            String hex = Integer.toHexString(0xFF & aByte);
             if (hex.length() == 1) {
                 sb.append('0');
             }
@@ -337,6 +336,7 @@ public class Monet {
 
         private String url;
 
+        private Drawable defaultDrawable;
 
         public Builder(Context context) {
             this.context = context;
@@ -358,12 +358,17 @@ public class Monet {
             return this;
         }
 
+        public Builder placeHolder(int resId) {
+            this.defaultDrawable = context.getResources().getDrawable(resId);
+            return this;
+        }
+
         public void draw() {
-            new Monet(context).draw(url, targetView, reqWidth, reqHeight);
+            new Monet(context, new Dispatcher(THREAD_POOL_EXECUTOR,MHandler)).draw(url, targetView, reqWidth, reqHeight, defaultDrawable);
         }
     }
 
-    private static class MonetResult {
+    static class MonetResult {
         public ImageView imageView;
         public String uri;
         public Bitmap bitmap;
