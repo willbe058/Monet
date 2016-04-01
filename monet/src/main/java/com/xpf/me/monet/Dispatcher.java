@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.os.Message;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.FutureTask;
 
 /**
  * Created by pengfeixie on 16/3/15.
