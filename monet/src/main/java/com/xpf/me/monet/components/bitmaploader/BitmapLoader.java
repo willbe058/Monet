@@ -1,4 +1,4 @@
-package com.xpf.me.monet;
+package com.xpf.me.monet.components.bitmaploader;
 
 import android.graphics.Bitmap;
 

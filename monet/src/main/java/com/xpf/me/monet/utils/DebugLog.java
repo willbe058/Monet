@@ -1,4 +1,4 @@
-package com.xpf.me.monet;
+package com.xpf.me.monet.utils;
 
 import android.os.SystemClock;
 import android.support.v7.appcompat.BuildConfig;

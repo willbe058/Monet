@@ -1,8 +1,10 @@
-package com.xpf.me.monet;
+package com.xpf.me.monet.components;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.xpf.me.monet.utils.DebugLog;
 
 import java.io.FileDescriptor;
 

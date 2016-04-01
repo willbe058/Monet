@@ -1,7 +1,13 @@
-package com.xpf.me.monet;
+package com.xpf.me.monet.components.bitmaploader;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+
+import com.xpf.me.monet.components.cache.CacheLoader;
+import com.xpf.me.monet.utils.DebugLog;
+import com.xpf.me.monet.executor.Dispatcher;
+import com.xpf.me.monet.Monet;
+import com.xpf.me.monet.components.downloader.DownLoader;
 
 import java.io.IOException;
 

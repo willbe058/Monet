@@ -1,4 +1,4 @@
-package com.xpf.me.monet;
+package com.xpf.me.monet.components.cache;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.os.StatFs;
 import android.support.v4.util.LruCache;
 
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.xpf.me.monet.utils.DebugLog;
+import com.xpf.me.monet.components.ImageResizer;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -45,9 +47,9 @@ public class CacheLoaderImpl implements CacheLoader {
         if (!diskCacheDir.exists()) {
             diskCacheDir.mkdirs();
         }
-        if (getUsableSpace(diskCacheDir) > CacheLoader.DISK_CACHE_SIZE) {
+        if (getUsableSpace(diskCacheDir) > DISK_CACHE_SIZE) {
             try {
-                mDiskLruCache = DiskLruCache.open(diskCacheDir, 1, 1, CacheLoader.DISK_CACHE_SIZE);
+                mDiskLruCache = DiskLruCache.open(diskCacheDir, 1, 1, DISK_CACHE_SIZE);
                 setDiskCacheCreated(true);
             } catch (IOException e) {
                 e.printStackTrace();

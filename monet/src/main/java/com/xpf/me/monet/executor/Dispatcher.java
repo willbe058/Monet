@@ -1,9 +1,11 @@
-package com.xpf.me.monet;
+package com.xpf.me.monet.executor;
 
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+
+import com.xpf.me.monet.Monet;
 
 import java.util.concurrent.ExecutorService;
 
@@ -32,11 +34,11 @@ public final class Dispatcher {
         this.mainHandler = handler;
     }
 
-    void dispatcherSubmit(Runnable runnable) {
+    public void dispatcherSubmit(Runnable runnable) {
         handler.obtainMessage(REQUEST_SUBMIT, runnable).sendToTarget();
     }
 
-    void dispatcherComplete(Monet.MonetResult result) {
+    public void dispatcherComplete(Monet.MonetResult result) {
         handler.obtainMessage(RESULT_COMPLETE, result).sendToTarget();
     }
 
@@ -47,7 +49,6 @@ public final class Dispatcher {
     void performComplete(Monet.MonetResult result) {
         mainHandler.obtainMessage(Monet.MESSAGE_POST_RESULT, result).sendToTarget();
     }
-
 
 
     private static class DispatcherHandler extends Handler {

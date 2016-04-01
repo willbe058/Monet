@@ -1,4 +1,4 @@
-package com.xpf.me.monet;
+package com.xpf.me.monet.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;

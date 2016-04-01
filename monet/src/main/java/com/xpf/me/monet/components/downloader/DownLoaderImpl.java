@@ -1,10 +1,13 @@
-package com.xpf.me.monet;
+package com.xpf.me.monet.components.downloader;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Looper;
 
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.xpf.me.monet.components.cache.CacheLoader;
+import com.xpf.me.monet.utils.DebugLog;
+import com.xpf.me.monet.utils.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

@@ -3,7 +3,6 @@ package com.xpf.me.monet;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
@@ -11,27 +10,22 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.StatFs;
-import android.support.v4.util.LruCache;
 import android.widget.ImageView;
 
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.xpf.me.monet.components.bitmaploader.BitmapLoader;
+import com.xpf.me.monet.components.bitmaploader.BitmapLoaderImpl;
+import com.xpf.me.monet.components.cache.CacheLoader;
+import com.xpf.me.monet.components.cache.CacheLoaderImpl;
+import com.xpf.me.monet.components.downloader.DownLoader;
+import com.xpf.me.monet.components.downloader.DownLoaderImpl;
+import com.xpf.me.monet.executor.Dispatcher;
+import com.xpf.me.monet.executor.MonetExecutorService;
+import com.xpf.me.monet.utils.DebugLog;
 import com.xpf.me.monety.R;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by xgo on 12/22/15.
