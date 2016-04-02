@@ -32,6 +32,10 @@ import java.util.concurrent.ExecutorService;
  */
 public class Monet {
 
+    private static volatile Monet INSTANCE = null;
+
+    public Context mContext;
+
     private static final String TAG = "Monet";
 
     public static final int MESSAGE_POST_RESULT = 1;
@@ -63,12 +67,10 @@ public class Monet {
 
     final static Dispatcher dispatcher = new Dispatcher(THREAD_POOL_EXECUTOR, MHandler);
 
-    private DiskLruCache mDiskLruCache;
-
     static private Drawable mDefalutDrawable;
 
     private Monet(Context context) {
-        Context mContext = context.getApplicationContext();
+        mContext = context.getApplicationContext();
         cacheLoader = new CacheLoaderImpl(mContext);
         downLoader = new DownLoaderImpl(cacheLoader);
     }
@@ -82,7 +84,7 @@ public class Monet {
      */
     private void draw(final String uri, final ImageView imageView
             , final int reqWidth, final int reqHeight, Drawable defaultDrawable) {
-        this.mDefalutDrawable = defaultDrawable;
+        mDefalutDrawable = defaultDrawable;
         imageView.setTag(TAG_KEY_URI, uri);
         final Bitmap bitmap = cacheLoader.loadFromMemCache(uri);
 
@@ -101,28 +103,19 @@ public class Monet {
     }
 
 
-    public File getDiskCacheDir(Context context, String uniqueName) {
-        boolean externalStorageAvailable = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-        final String cachePath;
-        if (externalStorageAvailable) {
-            cachePath = context.getExternalCacheDir().getPath();
-        } else {
-            cachePath = context.getCacheDir().getPath();
+    public static Monet with(Context context) {
+        if (INSTANCE == null) {
+            synchronized (Monet.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new Monet(context);
+                }
+            }
         }
-        return new File(cachePath + File.separator + uniqueName);
+        return INSTANCE;
     }
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private long getUsableSpace(File path) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            return path.getUsableSpace();
-        }
-        final StatFs stats = new StatFs(path.getPath());
-        return stats.getBlockSizeLong() * stats.getAvailableBlocksLong();
-    }
-
-    public static Builder with(Context context) {
-        return new Builder(context);
+    public RequestMaker load(String url) {
+        return new RequestMaker(this, url);
     }
 
     public static class Builder {
@@ -164,6 +157,10 @@ public class Monet {
 
         public void draw() {
             new Monet(context).draw(url, targetView, reqWidth, reqHeight, defaultDrawable);
+        }
+
+        public Monet build() {
+            return new Monet(context);
         }
     }
 

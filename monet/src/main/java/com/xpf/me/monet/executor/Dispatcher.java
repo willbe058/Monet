@@ -26,7 +26,7 @@ public final class Dispatcher {
 
     private final DispatcherThread thread;
 
-    Dispatcher(ExecutorService service, Handler handler) {
+    public Dispatcher(ExecutorService service, Handler handler) {
         thread = new DispatcherThread();
         thread.start();
         this.executorService = service;
@@ -43,6 +43,8 @@ public final class Dispatcher {
     }
 
     void performSubmit(Runnable runnable) {
+        // TODO: 16/4/2 make bitmap loader with request
+
         executorService.execute(runnable);
     }
 
