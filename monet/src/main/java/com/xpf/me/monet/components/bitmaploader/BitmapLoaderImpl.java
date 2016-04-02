@@ -3,11 +3,11 @@ package com.xpf.me.monet.components.bitmaploader;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.xpf.me.monet.Performer;
 import com.xpf.me.monet.components.cache.CacheLoader;
-import com.xpf.me.monet.utils.DebugLog;
-import com.xpf.me.monet.executor.Dispatcher;
-import com.xpf.me.monet.Monet;
 import com.xpf.me.monet.components.downloader.DownLoader;
+import com.xpf.me.monet.executor.Dispatcher;
+import com.xpf.me.monet.utils.DebugLog;
 
 import java.io.IOException;
 
@@ -20,24 +20,17 @@ public class BitmapLoaderImpl implements BitmapLoader {
 
     private DownLoader downLoader;
 
-    private String url;
-
-    private int reqWidth;
-
-    private int reqHeight;
-
     private Dispatcher dispatcher;
 
-    private ImageView imageView;
+    private Performer<ImageView> performer;
 
-    public BitmapLoaderImpl(Dispatcher dispatcher, CacheLoader cacheLoader, DownLoader downLoader, ImageView imageView, String url, int reqWidth, int reqHeight) {
-        this.url = url;
-        this.reqWidth = reqWidth;
-        this.reqHeight = reqHeight;
+    private Bitmap result;
+
+    public BitmapLoaderImpl(Dispatcher dispatcher, CacheLoader cacheLoader, DownLoader downLoader, Performer performer) {
+        this.performer = performer;
+        this.dispatcher = dispatcher;
         this.cacheLoader = cacheLoader;
         this.downLoader = downLoader;
-        this.dispatcher = dispatcher;
-        this.imageView = imageView;
     }
 
     @Override
@@ -69,14 +62,21 @@ public class BitmapLoaderImpl implements BitmapLoader {
 
     @Override
     public void run() {
-        Bitmap bitmap = load(url, reqWidth, reqHeight);
-        if (bitmap != null) {
-            Monet.MonetResult result = new Monet.MonetResult(imageView, url, bitmap);
-            dispatcher.dispatcherComplete(result);
+        result = load(performer.url, performer.reqWidth, performer.reqHeight);
+        if (result != null) {
+            dispatcher.dispatcherComplete(this);
         }
     }
 
-    public static BitmapLoader CreateBitmapLoader(Dispatcher dispatcher, CacheLoader cacheLoader, DownLoader downLoader, ImageView imageView, String url, int reqWidth, int reqHeight) {
-        return new BitmapLoaderImpl(dispatcher, cacheLoader, downLoader, imageView, url, reqWidth, reqHeight);
+    public Bitmap getResult() {
+        return result;
+    }
+
+    public Performer<ImageView> getPerformer() {
+        return performer;
+    }
+
+    public static BitmapLoader CreateBitmapLoader(Dispatcher dispatcher, CacheLoader cacheLoader, DownLoader downLoader, Performer performer) {
+        return new BitmapLoaderImpl(dispatcher, cacheLoader, downLoader, performer);
     }
 }

@@ -41,10 +41,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         String url = mData.get(position);
         Monet.with(mContext)
                 .load(url)
-                .size(100, 100)
-                .on(holder.imageView)
+                .resize(100, 100)
                 .placeHolder(R.mipmap.ic_launcher)
-                .draw();
+                .draw(holder.imageView);
     }
 
     @Override

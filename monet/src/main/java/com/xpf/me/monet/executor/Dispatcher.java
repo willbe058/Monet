@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.os.Message;
 
 import com.xpf.me.monet.Monet;
+import com.xpf.me.monet.components.bitmaploader.BitmapLoader;
 
 import java.util.concurrent.ExecutorService;
 
@@ -38,7 +39,8 @@ public final class Dispatcher {
         handler.obtainMessage(REQUEST_SUBMIT, runnable).sendToTarget();
     }
 
-    public void dispatcherComplete(Monet.MonetResult result) {
+
+    public void dispatcherComplete(BitmapLoader result) {
         handler.obtainMessage(RESULT_COMPLETE, result).sendToTarget();
     }
 
@@ -48,7 +50,7 @@ public final class Dispatcher {
         executorService.execute(runnable);
     }
 
-    void performComplete(Monet.MonetResult result) {
+    void performComplete(BitmapLoader result) {
         mainHandler.obtainMessage(Monet.MESSAGE_POST_RESULT, result).sendToTarget();
     }
 
@@ -69,8 +71,8 @@ public final class Dispatcher {
                     dispatcher.performSubmit(runnable);
                     break;
                 case RESULT_COMPLETE:
-                    Monet.MonetResult result = ((Monet.MonetResult) msg.obj);
-                    dispatcher.performComplete(result);
+                    BitmapLoader bitmapLoader = ((BitmapLoader) msg.obj);
+                    dispatcher.performComplete(bitmapLoader);
                     break;
             }
         }
