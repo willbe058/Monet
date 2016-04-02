@@ -1,5 +1,3 @@
-#[WARNING] I am now refactoring this whole project, so ignore all the information below 'cause the api may change.
-
 
 # Monet
 a simple and easy-use image loader, just for my personal learning
