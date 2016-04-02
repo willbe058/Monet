@@ -1,4 +1,4 @@
-#[WARNING] I am now refactoring this whole project, so ignore all the information below cause the api may change.
+#[WARNING] I am now refactoring this whole project, so ignore all the information below 'cause the api may change.
 
 
 # Monet
