@@ -41,11 +41,11 @@ public class RequestMaker {
         if (imageView == null) {
             throw new RuntimeException("ImageView can not be null");
         }
-        imageView.setTag(Monet.TAG_KEY_URI, url);
+        imageView.setTag(url);
         final Bitmap bitmap = monet.cacheLoader.loadFromMemCache(url);
 
         if (bitmap != null) {
-            String url = ((String) imageView.getTag(Monet.TAG_KEY_URI));
+            String url = ((String) imageView.getTag());
             if (url.equals(this.url)) {
                 imageView.setImageBitmap(bitmap);
             } else {
@@ -55,7 +55,7 @@ public class RequestMaker {
             return;
         }
 
-        Performer performer = new ImagePerformer(monet, imageView, url, reqWidth, reqHeight, defaultDrawable);
+        Performer<ImageView> performer = new ImagePerformer(monet, imageView, url, reqWidth, reqHeight, defaultDrawable);
         BitmapLoader bitmapLoader = BitmapLoaderImpl.CreateBitmapLoader(monet.dispatcher,
                 monet.cacheLoader,
                 monet.downLoader,

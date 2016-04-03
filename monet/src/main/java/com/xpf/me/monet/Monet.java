@@ -25,8 +25,6 @@ public class Monet {
 
     public Context mContext;
 
-    private static final String TAG = "Monet";
-
     public static final int MESSAGE_POST_RESULT = 1;
 
     public static final int TAG_KEY_URI = R.id.dummy;

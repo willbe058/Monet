@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public interface CacheLoader {
 
-    long DISK_CACHE_SIZE = 1024 * 1024 * 50;//50m for disk cache
+    long DISK_CACHE_SIZE = 1024 * 1024 * 10;//50m for disk cache
 
     int IO_BUFFER_SIZE = 8 * 1024;
 

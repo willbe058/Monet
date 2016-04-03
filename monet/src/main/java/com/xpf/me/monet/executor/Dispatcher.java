@@ -35,7 +35,7 @@ public final class Dispatcher {
         this.mainHandler = handler;
     }
 
-    public void dispatcherSubmit(Runnable runnable) {
+    public void dispatcherSubmit(BitmapLoader runnable) {
         handler.obtainMessage(REQUEST_SUBMIT, runnable).sendToTarget();
     }
 
@@ -44,10 +44,9 @@ public final class Dispatcher {
         handler.obtainMessage(RESULT_COMPLETE, result).sendToTarget();
     }
 
-    void performSubmit(Runnable runnable) {
+    void performSubmit(BitmapLoader runnable) {
         // TODO: 16/4/2 make bitmap loader with request
-
-        executorService.execute(runnable);
+        executorService.submit(runnable);
     }
 
     void performComplete(BitmapLoader result) {
@@ -67,7 +66,7 @@ public final class Dispatcher {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case REQUEST_SUBMIT:
-                    Runnable runnable = ((Runnable) msg.obj);
+                    BitmapLoader runnable = ((BitmapLoader) msg.obj);
                     dispatcher.performSubmit(runnable);
                     break;
                 case RESULT_COMPLETE:

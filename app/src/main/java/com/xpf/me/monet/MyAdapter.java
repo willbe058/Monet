@@ -39,6 +39,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
         String url = mData.get(position);
+
+
+
         Monet.with(mContext)
                 .load(url)
                 .resize(100, 100)

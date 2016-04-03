@@ -3,6 +3,7 @@ package com.xpf.me.monet.executor;
 import android.support.annotation.NonNull;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -27,10 +28,12 @@ public class MonetExecutorService extends ThreadPoolExecutor {
                 });
     }
 
+    @NonNull
     @Override
-    public void execute(Runnable command) {
-        MonetFutureTask task = new MonetFutureTask(command);
-        super.execute(task);
+    public Future<?> submit(Runnable task) {
+        MonetFutureTask futureTask = new MonetFutureTask(task);
+        execute(futureTask);
+        return futureTask;
     }
 
     private static final class MonetFutureTask extends FutureTask<Runnable>

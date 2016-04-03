@@ -26,7 +26,7 @@ public class BitmapLoaderImpl implements BitmapLoader {
 
     private Bitmap result;
 
-    public BitmapLoaderImpl(Dispatcher dispatcher, CacheLoader cacheLoader, DownLoader downLoader, Performer performer) {
+    public BitmapLoaderImpl(Dispatcher dispatcher, CacheLoader cacheLoader, DownLoader downLoader, Performer<ImageView> performer) {
         this.performer = performer;
         this.dispatcher = dispatcher;
         this.cacheLoader = cacheLoader;
