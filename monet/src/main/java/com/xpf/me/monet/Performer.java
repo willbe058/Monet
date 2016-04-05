@@ -13,6 +13,7 @@ public abstract class Performer<T> {
     public final int reqWidth, reqHeight;
     public final String url;
     public Drawable drawable;
+    public boolean cancelled;
 
     public Performer(Monet monet, T target, String url, int reqWidth, int reqHeight, Drawable drawable) {
         this.drawable = drawable;
@@ -21,6 +22,14 @@ public abstract class Performer<T> {
         this.url = url;
         this.reqWidth = reqWidth;
         this.reqHeight = reqHeight;
+    }
+
+    public void cancel() {
+        cancelled = true;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
     }
 
     public abstract void complete(Bitmap result);

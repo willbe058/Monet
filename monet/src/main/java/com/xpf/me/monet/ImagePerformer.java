@@ -17,6 +17,9 @@ public class ImagePerformer extends Performer<ImageView> {
 
     @Override
     public void complete(Bitmap result) {
+        if (target == null) {
+            return;
+        }
         target.setImageBitmap(result);
         String uri = ((String) target.getTag());
         if (uri.equals(url)) {

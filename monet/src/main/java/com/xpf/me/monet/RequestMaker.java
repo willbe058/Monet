@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
-import com.xpf.me.monet.components.bitmaploader.BitmapLoader;
-import com.xpf.me.monet.components.bitmaploader.BitmapLoaderImpl;
 import com.xpf.me.monet.utils.DebugLog;
 
 /**
@@ -55,17 +53,8 @@ public class RequestMaker {
             return;
         }
 
-        Performer<ImageView> performer = new ImagePerformer(monet, imageView, url, reqWidth, reqHeight, defaultDrawable);
-        BitmapLoader bitmapLoader = BitmapLoaderImpl.CreateBitmapLoader(monet.dispatcher,
-                monet.cacheLoader,
-                monet.downLoader,
-                performer);
-
-        monet.dispatcher.dispatcherSubmit(bitmapLoader);
-
-        //cache
-        //placeholder
-        //make action
-        //monet submit with dispatcher
+        Performer<ImageView> performer =
+                new ImagePerformer(monet, imageView, url, reqWidth, reqHeight, defaultDrawable);
+        monet.submit(performer);
     }
 }

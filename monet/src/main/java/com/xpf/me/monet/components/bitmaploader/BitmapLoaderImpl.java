@@ -10,6 +10,9 @@ import com.xpf.me.monet.executor.Dispatcher;
 import com.xpf.me.monet.utils.DebugLog;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * Created by pengfeixie on 16/4/2.
@@ -25,6 +28,11 @@ public class BitmapLoaderImpl implements BitmapLoader {
     private Performer<ImageView> performer;
 
     private Bitmap result;
+
+    public Future<?> future;
+
+    public List<Performer<ImageView>> performers;
+
 
     public BitmapLoaderImpl(Dispatcher dispatcher, CacheLoader cacheLoader, DownLoader downLoader, Performer<ImageView> performer) {
         this.performer = performer;
@@ -68,6 +76,38 @@ public class BitmapLoaderImpl implements BitmapLoader {
         }
     }
 
+   public void attach(Performer<ImageView> performer) {
+        if (this.performer == null) {
+            this.performer = performer;
+            return;
+        }
+        if (performers == null) {
+            performers = new ArrayList<>(3);
+        }
+        performers.add(performer);
+    }
+
+    public void detach(Performer<ImageView> performer) {
+        boolean detached = false;
+        if (this.performer == performer) {
+            this.performer = null;
+            detached = true;
+        } else if (performers != null) {
+            detached = performers.remove(performer);
+        }
+    }
+
+    public boolean cancel() {
+        return performer == null
+                && (performers == null || performers.isEmpty())
+                && future != null
+                && future.cancel(false);
+    }
+
+    boolean isCancelled() {
+        return future != null && future.isCancelled();
+    }
+
     public Bitmap getResult() {
         return result;
     }
@@ -76,7 +116,7 @@ public class BitmapLoaderImpl implements BitmapLoader {
         return performer;
     }
 
-    public static BitmapLoader CreateBitmapLoader(Dispatcher dispatcher, CacheLoader cacheLoader, DownLoader downLoader, Performer performer) {
+    public static BitmapLoaderImpl CreateBitmapLoader(Dispatcher dispatcher, CacheLoader cacheLoader, DownLoader downLoader, Performer<ImageView> performer) {
         return new BitmapLoaderImpl(dispatcher, cacheLoader, downLoader, performer);
     }
 }

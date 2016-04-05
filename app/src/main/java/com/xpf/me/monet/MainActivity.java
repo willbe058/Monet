@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
         MyAdapter adapter = new MyAdapter(this);
         Resources res = getResources();
         String[] b = res.getStringArray(R.array.beauties);
-        List<String> beauties = Arrays.asList(b);
 
+        List<String> beauties = Arrays.asList(b);
         GridLayoutManager manager = new GridLayoutManager(this, 1, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
